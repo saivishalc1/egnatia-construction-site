@@ -232,6 +232,18 @@ export const en = {
     ],
   },
 
+  reviews: {
+    eyebrow: 'Client reviews',
+    lines: ['What our clients', '*say.*'],
+    basedOn: (n: number) => `Based on ${n} Google reviews`,
+    stars: (r: string) => `${r} out of 5 stars`,
+    leave: 'Leave a review',
+    readAll: 'All reviews on Google',
+    from: 'Reviews from Google',
+    more: 'Read the full review',
+    heroBadge: (r: string, n: number) => `${r} on Google · ${n} reviews`,
+  },
+
   faq: {
     eyebrow: 'Questions',
     lines: ['Good to know', 'before we *start.*'],

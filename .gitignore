@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 assets-raw/
+
+# Generated at build time from the Google Places API
+public/reviews.json

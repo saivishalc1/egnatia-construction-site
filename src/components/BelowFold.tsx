@@ -7,6 +7,7 @@ import { Estimator } from './Estimator'
 import { Manifesto } from './Manifesto'
 import { MobileCta } from './MobileCta'
 import { ProcessFilm } from './ProcessFilm'
+import { Reviews } from './Reviews'
 import { Services } from './Services'
 import { Studio } from './Studio'
 import { Work } from './Work'
@@ -42,6 +43,7 @@ export function BelowFold() {
       <Manifesto />
       <Services />
       <Work />
+      <Reviews />
       <ProcessFilm />
       <Estimator onSend={sendEstimate} />
       <Studio />

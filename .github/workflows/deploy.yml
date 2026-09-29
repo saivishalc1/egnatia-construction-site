@@ -4,6 +4,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Rebuild every morning so new Google reviews appear without a code change
+  schedule:
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 permissions:
@@ -26,9 +29,11 @@ jobs:
           cache: npm
       - run: npm ci
       # Project sites live at https://<user>.github.io/<repo>/, so assets need that prefix
+      # "prebuild" pulls the Google rating + reviews (needs the GOOGLE_PLACES_API_KEY secret)
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

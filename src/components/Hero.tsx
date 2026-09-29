@@ -5,6 +5,8 @@ import { highlightNumbers } from '@/data'
 import { rich, useLang } from '@/i18n'
 import { HeroVideo } from './HeroVideo'
 import { scrollTimelineSupported as sd } from '@/lib/scroll-timeline'
+import { useGoogleReviews } from '@/lib/reviews'
+import { Stars } from './ui/stars'
 import { useIntroDelay } from './Intro'
 import { Magnetic } from './Magnetic'
 import { MaskLines } from './Reveal'
@@ -20,6 +22,8 @@ export function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
   const d = useIntroDelay()
+  const reviews = useGoogleReviews()
+  const ratingText = reviews?.rating?.toLocaleString(t.locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
   return (
     <section ref={ref} id="top" className="on-dark relative flex h-svh min-h-[620px] flex-col overflow-hidden bg-ink">
@@ -81,6 +85,19 @@ export function Hero() {
                 </a>
               </Magnetic>
             </motion.div>
+
+            {reviews && ratingText && (
+              <motion.a
+                href="#reviews"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.9, delay: d + 0.7 }}
+                className="mt-7 inline-flex items-center gap-3 text-sm text-bone/80 transition-colors hover:text-bone"
+              >
+                <Stars rating={reviews.rating!} label={t.reviews.stars(ratingText)} className="text-base" />
+                {t.reviews.heroBadge(ratingText, reviews.count)}
+              </motion.a>
+            )}
           </div>
 
           {/* Two quiet figures, bottom right */}

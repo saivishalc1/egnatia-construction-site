@@ -226,6 +226,18 @@ export const es: Content = {
     ],
   },
 
+  reviews: {
+    eyebrow: 'Reseñas de clientes',
+    lines: ['Lo que dicen', 'nuestros *clientes.*'],
+    basedOn: (n: number) => `Según ${n} reseñas en Google`,
+    stars: (r: string) => `${r} de 5 estrellas`,
+    leave: 'Dejar una reseña',
+    readAll: 'Todas las reseñas en Google',
+    from: 'Reseñas de Google',
+    more: 'Leer la reseña completa',
+    heroBadge: (r: string, n: number) => `${r} en Google · ${n} reseñas`,
+  },
+
   faq: {
     eyebrow: 'Preguntas',
     lines: ['Bueno saberlo', 'antes de *empezar.*'],
