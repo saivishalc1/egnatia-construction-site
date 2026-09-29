@@ -25,6 +25,19 @@ Free, runs in Egnatia's own Google account, no server.
 7. **⭐ Reviews → Turn on daily automation.** It now runs every morning around 10am.
 8. Delete the EXAMPLE row.
 
+## Live demo (Instant mode)
+
+To show a client the email arriving in real time:
+
+1. Do the setup above in **your own** Google account (steps 1–6).
+2. **⭐ Reviews → Instant mode ON.** Approve the permission prompt if Google asks.
+3. On the call, type a new row: your name, **your email**, EN or ES, a project, then
+   **Completed on last** (⌘ + ; types today's date). The email lands in your inbox
+   within about 10–30 seconds and Status turns to *Requested*.
+4. Afterwards: **⭐ Reviews → Instant mode OFF**, and delete the demo row.
+
+Instant mode skips the 2-day wait, so keep it off for real clients.
+
 ## Day to day
 
 When a project is finished, add a row: **Client name, Email, Phone, Language (EN/ES),

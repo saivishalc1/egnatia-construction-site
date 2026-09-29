@@ -55,6 +55,9 @@ function onOpen() {
     .addItem('Turn on daily automation', 'installDailyTrigger')
     .addItem('Turn off daily automation', 'removeDailyTrigger')
     .addSeparator()
+    .addItem('Instant mode ON (email as soon as a row is filled)', 'instantModeOn')
+    .addItem('Instant mode OFF', 'instantModeOff')
+    .addSeparator()
     .addItem('Set up / repair the sheet', 'setupSheet')
     .addToUi()
 }
@@ -95,9 +98,48 @@ function removeDailyTrigger(silent) {
   if (silent !== true) SpreadsheetApp.getActive().toast('Daily automation is off.', 'Reviews')
 }
 
+/*
+ * Instant mode (great for demos): no 2-day wait, and the sheet checks for due emails
+ * every time it's edited, so the request goes out seconds after a row is filled in.
+ */
+function instantModeOn() {
+  instantModeOff(true)
+  PropertiesService.getScriptProperties().setProperty('INSTANT', '1')
+  ScriptApp.newTrigger('onSheetEdited').forSpreadsheet(SpreadsheetApp.getActive()).onEdit().create()
+  SpreadsheetApp.getActive().toast('Instant mode is on. Type the "Completed on" date last: the email goes out within seconds.', 'Reviews', 8)
+}
+
+function instantModeOff(silent) {
+  PropertiesService.getScriptProperties().deleteProperty('INSTANT')
+  ScriptApp.getProjectTriggers()
+    .filter((t) => t.getHandlerFunction() === 'onSheetEdited')
+    .forEach((t) => ScriptApp.deleteTrigger(t))
+  if (silent !== true) SpreadsheetApp.getActive().toast('Instant mode is off (back to 2 days after completion).', 'Reviews')
+}
+
+function onSheetEdited(e) {
+  if (e && e.range && e.range.getSheet().getName() !== CONFIG.sheetName) return
+  processReviewRequests()
+}
+
+function isInstant() {
+  return PropertiesService.getScriptProperties().getProperty('INSTANT') === '1'
+}
+
 /* ─── Main job ─────────────────────────────────────────── */
 
 function processReviewRequests() {
+  // Quick edits can fire several runs at once; the lock stops a client getting two emails
+  const lock = LockService.getScriptLock()
+  if (!lock.tryLock(30000)) return
+  try {
+    sendDueEmails()
+  } finally {
+    lock.releaseLock()
+  }
+}
+
+function sendDueEmails() {
   const sheet = SpreadsheetApp.getActive().getSheetByName(CONFIG.sheetName)
   if (!sheet) throw new Error(`No sheet named "${CONFIG.sheetName}". Run ⭐ Reviews → Set up / repair the sheet.`)
   const lastRow = sheet.getLastRow()
@@ -106,6 +148,7 @@ function processReviewRequests() {
   const range = sheet.getRange(2, 1, lastRow - 1, HEADERS.length)
   const rows = range.getValues()
   const today = startOfDay(new Date())
+  const wait = isInstant() ? 0 : CONFIG.daysAfterCompletion
   let sent = 0
 
   rows.forEach((row, i) => {
@@ -129,7 +172,7 @@ function processReviewRequests() {
     if (MailApp.getRemainingDailyQuota() < 1) return
 
     try {
-      if (!requestSent && daysBetween(completed, today) >= CONFIG.daysAfterCompletion) {
+      if (!requestSent && daysBetween(completed, today) >= wait) {
         sendEmail(email, lang, 'request', name, project)
         sheet.getRange(r, COL['Request sent'] + 1).setValue(today)
         sheet.getRange(r, COL['Status'] + 1).setValue(STATUS.requested)
