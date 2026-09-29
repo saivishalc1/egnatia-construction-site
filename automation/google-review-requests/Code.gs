@@ -151,7 +151,7 @@ function processReviewRequests() {
 function sendTestEmail() {
   const me = Session.getActiveUser().getEmail()
   sendEmail(me, 'EN', 'request', 'Maria', 'kitchen renovation')
-  sendEmail(me, 'ES', 'request', 'María', 'remodelación de cocina')
+  sendEmail(me, 'ES', 'request', 'María', 'la remodelación de su cocina')
   SpreadsheetApp.getActive().toast(`Test emails (EN + ES) sent to ${me}.`, 'Reviews')
 }
 
