@@ -1,0 +1,391 @@
+/* Self-hosted fonts: no third-party round trips before text can render */
+@import '@fontsource-variable/inter';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
+
+/* Semantic tokens. "ink" = page background, "bone" = main text, whatever the palette.
+   Defaults are the Ember palette; others override them via <html data-palette="…">. */
+@theme {
+  --color-ink: #0c0b0a;
+  --color-surface: #161412;
+  --color-surface-2: #1f1c19;
+  --color-bone: #f2eee8;
+  --color-stone: #a8a29a;
+  --color-line: rgb(242 238 232 / 0.12);
+  --color-accent: #ee6a2b;
+  --color-accent-hover: #ff7c3d;
+  --color-on-accent: #0c0b0a;
+  --color-ok: #34d399;
+  --color-warn: #fcd34d;
+  --color-danger: #ff8a65;
+
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Palettes, adapted from UI/UX Pro Max's product palette database.
+   --accent-bright is the accent used on dark photo areas (hero, image cards). */
+:root {
+  --accent-bright: #ee6a2b;
+  --accent-bright-hover: #ff7c3d;
+  --scheme: dark;
+}
+
+/* Cinema (default): near-black, warm bone text, champagne gold. The "cinematic dark"
+   direction: full-bleed imagery, serif display type, film grain. */
+[data-palette='cinema'] {
+  --color-ink: #0b0a09;
+  --color-surface: #121110;
+  --color-surface-2: #1a1816;
+  --color-bone: #efe9df;
+  --color-stone: #a59d91;
+  --color-line: rgb(239 233 223 / 0.12);
+  --color-accent: #d9b877;
+  --color-accent-hover: #e8cb8d;
+  --color-on-accent: #0b0a09;
+  --accent-bright: #d9b877;
+  --accent-bright-hover: #e8cb8d;
+}
+
+/* Brass: dark luxury, gold accent (from "Luxury/Premium Brand", re-cut for dark) */
+[data-palette='brass'] {
+  --color-ink: #0e0d0b;
+  --color-surface: #171512;
+  --color-surface-2: #211e1a;
+  --color-bone: #f3efe7;
+  --color-stone: #aca597;
+  --color-line: rgb(243 239 231 / 0.12);
+  --color-accent: #c9a24a;
+  --color-accent-hover: #dbb863;
+  --color-on-accent: #0e0d0b;
+  --accent-bright: #c9a24a;
+  --accent-bright-hover: #dbb863;
+}
+
+/* Limestone: warm stone + gold ("Luxury/Premium Brand") */
+[data-palette='limestone'] {
+  --scheme: light;
+  --color-ink: #faf9f7;
+  --color-surface: #f1eee9;
+  --color-surface-2: #ffffff;
+  --color-bone: #0c0a09;
+  --color-stone: #57534e;
+  --color-line: #dcd8d2;
+  --color-accent: #a16207;
+  --color-accent-hover: #854d0e;
+  --color-on-accent: #ffffff;
+  --color-ok: #047857;
+  --color-warn: #b45309;
+  --color-danger: #c2410c;
+  --accent-bright: #d4a64a;
+  --accent-bright-hover: #e2b965;
+}
+
+/* Industrial: slate + safety orange ("Construction/Architecture") */
+[data-palette='industrial'] {
+  --scheme: light;
+  --color-ink: #f8fafc;
+  --color-surface: #eef2f6;
+  --color-surface-2: #ffffff;
+  --color-bone: #0f172a;
+  --color-stone: #475569;
+  --color-line: #dde3ea;
+  --color-accent: #c2410c;
+  --color-accent-hover: #9a3412;
+  --color-on-accent: #ffffff;
+  --color-ok: #047857;
+  --color-warn: #b45309;
+  --color-danger: #b91c1c;
+  --accent-bright: #f97316;
+  --accent-bright-hover: #fb8a3c;
+}
+
+/* Interior: warm linen + amber ("Home Decoration & Interior Design") */
+[data-palette='interior'] {
+  --scheme: light;
+  --color-ink: #faf5f2;
+  --color-surface: #f2eae4;
+  --color-surface-2: #ffffff;
+  --color-bone: #1c1917;
+  --color-stone: #5c5650;
+  --color-line: #e6dbd2;
+  --color-accent: #b45309;
+  --color-accent-hover: #92400e;
+  --color-on-accent: #ffffff;
+  --color-ok: #047857;
+  --color-warn: #a16207;
+  --color-danger: #c2410c;
+  --accent-bright: #f59e0b;
+  --accent-bright-hover: #fbbf24;
+}
+
+/* Light "product" sections in the blended design (warm paper, bronze accent),
+   used between the dark cinematic moments. */
+.on-light {
+  --color-ink: #f4f1ec;
+  --color-surface: #ebe6de;
+  --color-surface-2: #ffffff;
+  --color-bone: #171411;
+  --color-stone: #5d564e;
+  --color-line: rgb(23 20 17 / 0.12);
+  --color-accent: #9c6a2c;
+  --color-accent-hover: #7f5421;
+  --color-on-accent: #ffffff;
+  --color-ok: #047857;
+  --color-warn: #b45309;
+  --color-danger: #c2410c;
+  color: var(--color-bone);
+  color-scheme: light;
+}
+
+/* Dark island for content sitting on photos: stays dark in every palette. */
+.on-dark {
+  --color-ink: #0c0b0a;
+  --color-surface: #161412;
+  --color-surface-2: #1f1c19;
+  --color-bone: #f2eee8;
+  --color-stone: #b5afa6;
+  --color-line: rgb(242 238 232 / 0.16);
+  --color-accent: var(--accent-bright);
+  --color-accent-hover: var(--accent-bright-hover);
+  --color-on-accent: #0c0b0a;
+  color: var(--color-bone);
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    color-scheme: var(--scheme);
+  }
+
+  body {
+    @apply bg-ink font-sans text-bone antialiased;
+    line-height: 1.6;
+  }
+
+  /* Cormorant defaults to old-style figures ("1" reads like "I"); use lining numerals */
+  .font-display,
+  .font-serif,
+  h1,
+  h2,
+  h3 {
+    font-variant-numeric: lining-nums proportional-nums;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    font-weight: 400;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+  }
+
+  ::selection {
+    @apply bg-accent text-on-accent;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-[0.7rem] font-medium tracking-[0.28em] text-stone uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-8 bg-accent;
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full bg-accent px-7 text-[0.72rem] font-medium tracking-[0.2em] text-on-accent uppercase transition-colors duration-300 hover:bg-accent-hover;
+  }
+
+  .btn-ghost {
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-3 rounded-full border border-bone/30 px-7 text-[0.72rem] font-medium tracking-[0.2em] text-bone uppercase transition-colors duration-300 hover:border-bone hover:bg-bone/5;
+  }
+}
+
+/* Estimator range slider: orange fill up to the thumb via --fill */
+.range-input {
+  appearance: none;
+  height: 2.75rem;
+  background: transparent;
+  cursor: pointer;
+}
+.range-input::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-accent) var(--fill), var(--color-line) var(--fill));
+}
+.range-input::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-accent) var(--fill), var(--color-line) var(--fill));
+}
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -10px;
+  border-radius: 999px;
+  background: var(--color-bone);
+  border: 6px solid var(--color-accent);
+  box-shadow: 0 6px 18px -4px rgb(0 0 0 / 0.35);
+  transition: transform 150ms ease;
+}
+.range-input::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--color-bone);
+  border: 6px solid var(--color-accent);
+}
+.range-input:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+.range-input:focus-visible {
+  outline: none;
+}
+.range-input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--color-bone);
+  outline-offset: 3px;
+}
+
+/* ─── Scroll-driven effects on the compositor (see src/lib/scroll-timeline.ts) ─── */
+@supports (animation-timeline: scroll()) {
+  @keyframes sd-grow-x {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes sd-grow-y {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  /* Page progress bar in the header */
+  .sd-page-progress {
+    transform-origin: left;
+    animation: sd-grow-x linear both;
+    animation-timeline: scroll(root);
+  }
+
+  /* Hero: photo/video drifts and zooms, copy lifts and fades as you leave */
+  .sd-hero-media {
+    animation: sd-hero-media linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100svh;
+  }
+  @keyframes sd-hero-media {
+    from { transform: translateY(0) scale(1.08); }
+    to { transform: translateY(12%) scale(1.25); }
+  }
+  .sd-hero-content {
+    animation: sd-hero-content linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100svh;
+  }
+  @keyframes sd-hero-content {
+    0% { transform: translateY(0); opacity: 1; }
+    70% { opacity: 0; }
+    100% { transform: translateY(30%); opacity: 0; }
+  }
+
+  /* Pinned Work gallery: the track slides sideways across the section's pinned range */
+  .sd-work {
+    view-timeline: --work block;
+  }
+  .sd-work-track {
+    animation: sd-work-slide linear both;
+    animation-timeline: --work;
+    animation-range: contain 0% contain 100%;
+  }
+  @keyframes sd-work-slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(var(--work-distance, 0px) * -1)); }
+  }
+  .sd-work-progress {
+    transform-origin: left;
+    animation: sd-grow-x linear both;
+    animation-timeline: --work;
+    animation-range: contain 0% contain 100%;
+  }
+
+  /* Process: the line draws from when the list is 30% up the screen until its end passes 60% */
+  .sd-process {
+    view-timeline: --process block;
+  }
+  .sd-process-line {
+    transform-origin: top;
+    animation: sd-grow-y linear both;
+    animation-timeline: --process;
+    animation-range: cover 30vh cover calc(100% - 60vh);
+  }
+
+  /* About photo parallax */
+  .sd-parallax {
+    animation: sd-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+  @keyframes sd-parallax {
+    from { transform: translateY(-8%) scale(1.18); }
+    to { transform: translateY(8%) scale(1.18); }
+  }
+}
+
+/* ─── View transitions (language switch, project detail morph) ─── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-group(*) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Film grain over everything: a static PNG tile, so it costs nothing per frame */
+.film-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  opacity: 0.045;
+  background-image: url('/grain.png');
+  background-size: 160px 160px;
+  /* no blend mode: blending a full-screen layer costs GPU time every frame */
+}
+@media (prefers-reduced-transparency: reduce) {
+  .film-grain { display: none; }
+}
