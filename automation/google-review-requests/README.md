@@ -28,7 +28,7 @@ Free, runs in Egnatia's own Google account, no server.
 ## Day to day
 
 When a project is finished, add a row: **Client name, Email, Phone, Language (EN/ES),
-Project** (e.g. "brownstone renovation"), **Completed on**. That's it:
+Project** (e.g. "brownstone renovation"; for Spanish, include the article: "la remodelación de su cocina"), **Completed on**. That's it:
 
 | When | What happens | Status becomes |
 |---|---|---|
